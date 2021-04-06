@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/post_model.dart';
+import 'package:flutter_cubit/domain/models.dart';
 
 typedef ItemTapCallback = void Function(PostModel postModel);
 

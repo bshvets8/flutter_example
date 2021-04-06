@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit/cubit/post_details.dart';
-import 'package:flutter_cubit/cubit/posts_list_cubit.dart';
-import 'package:flutter_cubit/cubit/posts_state.dart';
+import 'package:flutter_cubit/widgets/widgets.dart';
 
-import '../posts_list.dart';
+import '../post_details/post_details.dart';
+import 'post_list_state.dart';
+import 'posts_list_cubit.dart';
 
 class PostsListPage extends StatefulWidget {
   static const routeName = "/posts";

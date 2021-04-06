@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_cubit/cubit/post_details_state.dart';
-import 'package:flutter_cubit/posts_repository.dart';
+import 'package:flutter_cubit/domain/repositories.dart';
+
+import 'post_details_state.dart';
 
 class PostDetailsCubit extends Cubit<PostDetailsState> {
   final PostsRepository _postsRepository;

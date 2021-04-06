@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit/cubit/comments_cubit.dart';
-import 'package:flutter_cubit/cubit/comments_state.dart';
-import 'package:flutter_cubit/cubit/post_details_cubit.dart';
-import 'package:flutter_cubit/cubit/post_details_state.dart';
+
+import 'comments_cubit.dart';
+import 'comments_state.dart';
+import 'post_details_cubit.dart';
+import 'post_details_state.dart';
 
 class PostDetails extends StatelessWidget {
   static const routeName = "/posts/details";
@@ -82,7 +83,11 @@ class _CommentsWidget extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.all(16),
-          child: Text('Comments', textAlign: TextAlign.start, style: TextStyle(color: Colors.black26),),
+          child: Text(
+            'Comments',
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.black26),
+          ),
         ),
         Expanded(
           child: BlocBuilder<CommentsCubit, CommentsState>(

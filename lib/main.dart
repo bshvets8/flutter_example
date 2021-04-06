@@ -4,21 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit/comments_repository.dart';
-import 'package:flutter_cubit/cubit/comments_cubit.dart';
-import 'package:flutter_cubit/cubit/post_details.dart';
-import 'package:flutter_cubit/cubit/post_details_cubit.dart';
-import 'package:flutter_cubit/cubit/posts_list_page.dart';
-import 'package:flutter_cubit/cubit/posts_list_cubit.dart';
-import 'package:flutter_cubit/posts_repository.dart';
-import 'package:flutter_cubit/web_api.dart';
+import 'package:flutter_cubit/cubit/cubit_posts.dart';
+import 'package:flutter_cubit/domain/data_providers.dart';
+import 'package:flutter_cubit/domain/repositories.dart';
 import 'package:http/http.dart';
+
+import 'home_page.dart';
 
 void main() {
   final client = Client();
   final webApi = WebAPI(client);
-  final postsRepository = PostsRepository(webApi);
-  final commentsRepository = CommentsRepository(webApi);
+  final webDataProvider = WebDataProvider(webApi);
+  final postsRepository = PostsRepository(webDataProvider);
+  final commentsRepository = CommentsRepository(webDataProvider);
+
+  debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
   runApp(MyApp(
     postsRepository: postsRepository,
@@ -90,46 +90,5 @@ class MyApp extends StatelessWidget {
             initialRoute: initialRoute,
             routes: routes,
           );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  static const routeName = "/";
-
-  @override
-  Widget build(BuildContext context) {
-    final title = Text('Flutter Architecture Example');
-
-    final body = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Navigate to a page:",
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 10),
-          CupertinoButton(
-            color: Theme.of(context).primaryColor,
-            onPressed: () =>
-                Navigator.of(context).pushNamed(PostsListPage.routeName),
-            child: Text("CUBIT"),
-          ),
-        ],
-      ),
-    );
-
-    return Platform.isIOS
-        ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-            ),
-            child: body,
-          )
-        : Scaffold(
-            appBar: AppBar(
-              title: title,
-            ),
-            body: body);
   }
 }

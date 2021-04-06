@@ -1,4 +1,4 @@
-import 'package:flutter_cubit/comment_model.dart';
+import 'package:flutter_cubit/domain/models.dart';
 
 class CommentsState {}
 

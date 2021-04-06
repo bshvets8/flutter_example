@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_cubit/comments_repository.dart';
-import 'package:flutter_cubit/cubit/comments_state.dart';
+import 'package:flutter_cubit/domain/repositories.dart';
+
+import 'comments_state.dart';
 
 class CommentsCubit extends Cubit<CommentsState> {
   final CommentsRepository _commentsRepository;

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_cubit/cubit/posts_state.dart';
-import 'package:flutter_cubit/posts_repository.dart';
+import 'package:flutter_cubit/domain/repositories.dart';
+
+import 'post_list_state.dart';
 
 class PostsListCubit extends Cubit<PostsListState> {
   final PostsRepository _postsRepository;
