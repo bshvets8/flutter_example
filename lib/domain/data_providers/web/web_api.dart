@@ -16,8 +16,7 @@ class WebAPI {
         "jsonplaceholder.typicode.com", "posts", {"id": postId.toString()}));
   }
 
-  Future<Response> getComments(int postId) {
-    return _client.get(Uri.https("jsonplaceholder.typicode.com", "comments",
-        {"postId": postId.toString()}));
+  Future<Response> getComments() {
+    return _client.get(Uri.https("jsonplaceholder.typicode.com", "comments"));
   }
 }

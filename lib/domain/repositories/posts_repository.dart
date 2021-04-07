@@ -1,15 +1,23 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cubit/domain/data_providers.dart';
 import 'package:flutter_cubit/domain/models.dart';
 
+// TODO: Add Abstraction, Separate Caching
 class PostsRepository {
   final WebDataProvider webDataProvider;
+  final LocalDataProvider localDataProvider;
 
-  PostsRepository(this.webDataProvider);
+  PostsRepository({@required this.webDataProvider, this.localDataProvider});
 
-  Future<List<PostModel>> getPosts() => webDataProvider.getPosts();
+  Stream<List<PostModel>> posts() => localDataProvider.posts();
 
-  Future<PostModel> getPost(int postId) async {
-    final posts = await getPosts();
-    return posts.firstWhere((element) => element.id == postId);
+  Stream<PostModel> getPost(int postId) => posts()
+      .map((posts) => posts.firstWhere((element) => element.id == postId));
+
+  void loadPosts() async {
+    final posts = await webDataProvider.getPosts();
+    localDataProvider.setPosts(posts);
   }
 }

@@ -14,9 +14,18 @@ import 'home_page.dart';
 void main() {
   final client = Client();
   final webApi = WebAPI(client);
-  final webDataProvider = WebDataProvider(webApi);
-  final postsRepository = PostsRepository(webDataProvider);
-  final commentsRepository = CommentsRepository(webDataProvider);
+  final jsonPlaceholderDataProvider = JsonPlaceholderWebDataProvider(webApi);
+  final inMemoryDataProvider = InMemoryDataProvider();
+
+  final postsRepository = PostsRepository(
+    webDataProvider: jsonPlaceholderDataProvider,
+    localDataProvider: inMemoryDataProvider,
+  );
+
+  final commentsRepository = CommentsRepository(
+    webDataProvider: jsonPlaceholderDataProvider,
+    localDataProvider: inMemoryDataProvider,
+  );
 
   debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
@@ -67,8 +76,7 @@ class MyApp extends StatelessWidget {
                         BlocProvider<PostDetailsCubit>(
                           create: (context) => PostDetailsCubit(
                               postsRepository: postsRepository,
-                              postId: settings.arguments)
-                            ..loadPost(),
+                              postId: settings.arguments),
                         ),
                         BlocProvider<CommentsCubit>(
                           create: (context) => CommentsCubit(
