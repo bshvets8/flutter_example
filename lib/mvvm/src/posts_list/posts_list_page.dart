@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:flutter_cubit/utils/utils.dart';
 import 'package:flutter_cubit/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../post_details/post_details.dart';
 import '../post_details/post_details_page.dart';
@@ -28,9 +31,19 @@ class _PostsListPageState extends State<PostsListPage> {
         postsRepository: RepositoryProvider.of<PostsRepository>(context));
     _postsListVM.loadPosts();
 
-    if (!MediaQuery.of(context).isTablet())
-      _postsListVM.selectedPostId.listen((postId) => Navigator.of(context)
-          .pushNamed(PostDetailsPage.routeName, arguments: postId));
+    if (!MediaQuery.of(context).isTablet()) {
+      _postsListVM.selectedPostId.listen((postId) {
+        final screenWidgetBuilder = (_) => Provider<PostsListVM>(
+              create: (_) => _postsListVM,
+              child: PostDetailsPage(),
+            );
+
+        final route = Platform.isIOS
+            ? CupertinoPageRoute(builder: screenWidgetBuilder)
+            : MaterialPageRoute(builder: screenWidgetBuilder);
+        Navigator.of(context).push(route);
+      });
+    }
   }
 
   @override
@@ -68,8 +81,9 @@ class _PostsListPageState extends State<PostsListPage> {
                     stream: _postsListVM.selectedPostId,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return PostDetails(
-                          postId: snapshot.data,
+                        return Provider<PostsListVM>(
+                          create: (context) => _postsListVM,
+                          child: PostDetails(),
                         );
                       }
                       return Container(

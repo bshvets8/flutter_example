@@ -10,8 +10,7 @@ class PostDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postId = ModalRoute.of(context).settings.arguments;
-    final body = PostDetails(postId: postId);
+    final body = PostDetails();
 
     final title = Text('PostDetails');
 

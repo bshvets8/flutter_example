@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
-import 'file:///D:/flutter_cubit/flutter_cubit/lib/mvvm/src/post_details/comments_vm.dart';
-import 'file:///D:/flutter_cubit/flutter_cubit/lib/mvvm/src/post_details/post_details_vm.dart';
+import 'package:flutter_cubit/mvvm/mvvm.dart';
+import 'package:provider/provider.dart';
+
+import 'comments_vm.dart';
+import 'post_details_vm.dart';
 
 class PostDetails extends StatefulWidget {
-  final int _postId;
-
-  const PostDetails({Key key, @required int postId})
-      : _postId = postId,
-        super(key: key);
-
   @override
   _PostDetailsState createState() => _PostDetailsState();
 }
@@ -26,7 +23,9 @@ class _PostDetailsState extends State<PostDetails> {
     _postDetailsVM = PostDetailsVM(
         postsRepository: RepositoryProvider.of<PostsRepository>(context));
 
-    _postDetailsVM.initWithPostId(widget._postId);
+    Provider.of<PostsListVM>(context).selectedPostId.listen((postId) {
+      _postDetailsVM.initWithPostId(postId);
+    });
   }
 
   @override
@@ -58,9 +57,7 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: _CommentsWidget(
-                  postId: widget._postId,
-                ),
+                child: _CommentsWidget(),
               ),
             ],
           );
@@ -86,12 +83,6 @@ class _PostDetailsState extends State<PostDetails> {
 }
 
 class _CommentsWidget extends StatefulWidget {
-  final int _postId;
-
-  const _CommentsWidget({Key key, @required int postId})
-      : _postId = postId,
-        super(key: key);
-
   @override
   __CommentsWidgetState createState() => __CommentsWidgetState();
 }
@@ -104,7 +95,10 @@ class __CommentsWidgetState extends State<_CommentsWidget> {
     super.didChangeDependencies();
     _commentsVM = CommentsVM(
         commentsRepository: RepositoryProvider.of<CommentsRepository>(context));
-    _commentsVM.initWithPostId(widget._postId);
+
+    Provider.of<PostsListVM>(context).selectedPostId.listen((postId) {
+      _commentsVM.initWithPostId(postId);
+    });
   }
 
   @override

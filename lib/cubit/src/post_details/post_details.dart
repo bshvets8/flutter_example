@@ -21,11 +21,14 @@ class _PostDetailsState extends State<PostDetails> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     BlocProvider.of<PostDetailsCubit>(context).setPostId(widget.postId);
+    BlocProvider.of<CommentsCubit>(context)
+      ..setPostId(widget.postId)
+      ..loadComments();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PostDetailsCubit, PostDetailsState>(
+    return BlocBuilder<PostDetailsCubit, PostDetailsState>(
       builder: (context, state) {
         if (state is PostLoaded) {
           final postModel = state.postModel;
@@ -69,13 +72,6 @@ class _PostDetailsState extends State<PostDetails> {
           alignment: Alignment.center,
           child: CircularProgressIndicator(),
         );
-      },
-      listener: (context, state) {
-        if (state is PostLoaded) {
-          BlocProvider.of<CommentsCubit>(context)
-            ..setPostId(state.postModel.id)
-            ..loadComments();
-        }
       },
     );
   }
