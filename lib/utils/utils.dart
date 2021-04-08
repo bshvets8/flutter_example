@@ -1,1 +1,1 @@
-export 'is_tablet_extension.dart';
+export 'src/is_tablet_extension.dart';

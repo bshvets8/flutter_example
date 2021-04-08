@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/cubit/cubit_posts.dart' as cubit;
+import 'package:flutter_cubit/cubit/cubit.dart' as cubit;
 import 'package:flutter_cubit/mvvm/mvvm.dart' as mvvm;
 import 'package:flutter_cubit/widgets/widgets.dart';
 

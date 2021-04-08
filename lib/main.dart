@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit/cubit/cubit_posts.dart';
-import 'package:flutter_cubit/domain/data_providers.dart';
-import 'package:flutter_cubit/domain/repositories.dart';
+import 'package:flutter_cubit/cubit/cubit.dart';
+import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:http/http.dart';
 
 import 'posts_app.dart';
@@ -14,12 +14,12 @@ void main() {
   final jsonPlaceholderDataProvider = JsonPlaceholderWebDataProvider(webApi);
   final inMemoryDataProvider = InMemoryDataProvider();
 
-  final postsRepository = PostsRepository(
+  final postsRepository = PostsRepositoryImpl(
     webDataProvider: jsonPlaceholderDataProvider,
     localDataProvider: inMemoryDataProvider,
   );
 
-  final commentsRepository = CommentsRepository(
+  final commentsRepository = CommentsRepositoryImpl(
     webDataProvider: jsonPlaceholderDataProvider,
     localDataProvider: inMemoryDataProvider,
   );

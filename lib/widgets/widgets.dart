@@ -1,2 +1,2 @@
-export 'posts_list.dart';
-export 'adaptive_button.dart';
+export 'src/posts_list.dart';
+export 'src/adaptive_button.dart';
