@@ -9,7 +9,9 @@ class PostsListCubit extends Cubit<PostsListState> {
   final PostsRepository _postsRepository;
   StreamSubscription _streamSubscription;
 
-  PostsListCubit(this._postsRepository) : super(PostsListInitial()) {
+  PostsListCubit({PostsRepository postsRepository})
+      : _postsRepository = postsRepository,
+        super(PostsListInitial()) {
     _streamSubscription = _postsRepository
         .posts()
         .listen((posts) => emit(PostsListLoaded(posts)))

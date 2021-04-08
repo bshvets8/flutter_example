@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/cubit/cubit_posts.dart';
+import 'package:flutter_cubit/cubit/cubit_posts.dart' as cubit;
+import 'package:flutter_cubit/mvvm/mvvm.dart' as mvvm;
 import 'package:flutter_cubit/widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,11 +23,18 @@ class HomePage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           AdaptiveButton(
-            color: Theme.of(context).primaryColor,
             onPressed: () =>
-                Navigator.of(context).pushNamed(PostsListPage.routeName),
+                Navigator.of(context).pushNamed(cubit.PostsListPage.routeName),
             child: Text(
               "CUBIT",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          AdaptiveButton(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(mvvm.PostsListPage.routeName),
+            child: Text(
+              "MVVM",
               style: TextStyle(color: Colors.white),
             ),
           ),

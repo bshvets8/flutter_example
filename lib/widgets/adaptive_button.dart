@@ -6,21 +6,18 @@ import 'package:flutter/material.dart';
 class AdaptiveButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
-  final Color color;
 
-  const AdaptiveButton({Key key, this.onPressed, this.color, this.child})
+  const AdaptiveButton({Key key, this.onPressed, this.child})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Platform.isIOS
-        ? CupertinoButton(
-            color: color,
+        ? CupertinoButton.filled(
             child: child,
             onPressed: onPressed,
           )
-        : MaterialButton(
-            color: color,
+        : ElevatedButton(
             child: child,
             onPressed: onPressed,
           );

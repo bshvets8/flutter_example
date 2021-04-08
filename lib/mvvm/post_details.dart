@@ -1,34 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'comments_cubit.dart';
-import 'comments_state.dart';
-import 'post_details_cubit.dart';
-import 'post_details_state.dart';
+import 'package:flutter_cubit/domain/models.dart';
+import 'package:flutter_cubit/domain/repositories.dart';
+import 'package:flutter_cubit/mvvm/comments_vm.dart';
+import 'package:flutter_cubit/mvvm/post_details_vm.dart';
 
 class PostDetails extends StatefulWidget {
-  final int postId;
+  final int _postId;
 
-  const PostDetails({Key key, @required this.postId}) : super(key: key);
+  const PostDetails({Key key, @required int postId})
+      : _postId = postId,
+        super(key: key);
 
   @override
   _PostDetailsState createState() => _PostDetailsState();
 }
 
 class _PostDetailsState extends State<PostDetails> {
+  PostDetailsVM _postDetailsVM;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    BlocProvider.of<PostDetailsCubit>(context).setPostId(widget.postId);
+    _postDetailsVM = PostDetailsVM(
+        postsRepository: RepositoryProvider.of<PostsRepository>(context),
+        commentsRepository: RepositoryProvider.of<CommentsRepository>(context));
+
+    _postDetailsVM.initWithPostId(widget._postId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PostDetailsCubit, PostDetailsState>(
-      builder: (context, state) {
-        if (state is PostLoaded) {
-          final postModel = state.postModel;
+    return StreamBuilder<PostModel>(
+      stream: _postDetailsVM.post,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final postModel = snapshot.data;
           return Column(
             children: [
               SizedBox(height: 16),
@@ -50,12 +58,16 @@ class _PostDetailsState extends State<PostDetails> {
                 ),
               ),
               SizedBox(height: 16),
-              Expanded(child: _CommentsWidget())
+              Expanded(
+                child: _CommentsWidget(
+                  postId: widget._postId,
+                ),
+              ),
             ],
           );
         }
 
-        if (state is PostLoadFailure) {
+        if (snapshot.hasError) {
           return Container(
             alignment: Alignment.center,
             child: Text(
@@ -70,18 +82,32 @@ class _PostDetailsState extends State<PostDetails> {
           child: CircularProgressIndicator(),
         );
       },
-      listener: (context, state) {
-        if (state is PostLoaded) {
-          BlocProvider.of<CommentsCubit>(context)
-            ..setPostId(state.postModel.id)
-            ..loadComments();
-        }
-      },
     );
   }
 }
 
-class _CommentsWidget extends StatelessWidget {
+class _CommentsWidget extends StatefulWidget {
+  final int _postId;
+
+  const _CommentsWidget({Key key, @required int postId})
+      : _postId = postId,
+        super(key: key);
+
+  @override
+  __CommentsWidgetState createState() => __CommentsWidgetState();
+}
+
+class __CommentsWidgetState extends State<_CommentsWidget> {
+  CommentsVM _commentsVM;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _commentsVM = CommentsVM(
+        commentsRepository: RepositoryProvider.of<CommentsRepository>(context));
+    _commentsVM.initWithPostId(widget._postId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -96,14 +122,16 @@ class _CommentsWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: BlocBuilder<CommentsCubit, CommentsState>(
-            builder: (context, state) {
-              if (state is CommentsLoaded) {
+          child: StreamBuilder<List<CommentModel>>(
+            stream: _commentsVM.comments,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final comments = snapshot.data;
                 return ListView.builder(
-                  itemCount: state.comments.length,
+                  itemCount: comments.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(
-                      state.comments[index].body,
+                      comments[index].body,
                       textAlign: TextAlign.end,
                       style: TextStyle(fontSize: 14),
                     ),
@@ -111,7 +139,7 @@ class _CommentsWidget extends StatelessWidget {
                 );
               }
 
-              if (state is CommentsLoadFailed) {
+              if (snapshot.hasError) {
                 return Container(
                   alignment: Alignment.center,
                   child: Text(

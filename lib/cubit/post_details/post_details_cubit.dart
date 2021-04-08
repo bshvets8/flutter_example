@@ -8,16 +8,14 @@ import 'post_details_state.dart';
 
 class PostDetailsCubit extends Cubit<PostDetailsState> {
   final PostsRepository _postsRepository;
-  final int _postId;
   StreamSubscription _streamSubscription;
 
-  PostDetailsCubit({
-    @required PostsRepository postsRepository,
-    @required int postId,
-  })  : _postId = postId,
-        _postsRepository = postsRepository,
-        super(PostDetailsInitial()) {
-    _streamSubscription = _postsRepository.getPost(_postId).listen((post) {
+  PostDetailsCubit({@required PostsRepository postsRepository})
+      : _postsRepository = postsRepository,
+        super(PostDetailsInitial());
+
+  void setPostId(int postId) {
+    _streamSubscription = _postsRepository.getPost(postId).listen((post) {
       emit(PostLoaded(post));
     })
       ..onError((e) => {PostLoadFailure()});
