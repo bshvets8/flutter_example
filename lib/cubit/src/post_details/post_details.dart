@@ -7,6 +7,7 @@ import 'comments_state.dart';
 import 'post_details_cubit.dart';
 import 'post_details_state.dart';
 
+// TODO: Rename to PostDetails"Widget".
 class PostDetails extends StatefulWidget {
   final int postId;
 

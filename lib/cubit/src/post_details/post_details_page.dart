@@ -11,12 +11,12 @@ class PostDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postId = ModalRoute.of(context).settings.arguments;
+    final postId = ModalRoute.of(context).settings.arguments; // TODO: Remove. Pass to cubit. Change only title
     final body = PostDetails(postId: postId);
 
     final title = Text('PostDetails');
 
-    return Platform.isIOS
+    return Platform.isIOS // TODO: Remove Scaffold recreation.
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: title,

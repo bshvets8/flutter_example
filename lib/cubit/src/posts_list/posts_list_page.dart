@@ -50,7 +50,8 @@ class _PostsListPageState extends State<PostsListPage> {
                       .pushNamed(PostDetailsPage.routeName, arguments: post.id),
             );
 
-            if (!isTablet) return postsList;
+            if (!isTablet)
+              return postsList; // TODO: Visibility widget. Keep in tree
 
             return Row(
               children: [
@@ -59,11 +60,11 @@ class _PostsListPageState extends State<PostsListPage> {
                   child: postsList,
                 ),
                 Flexible(
-                  child: BlocConsumer<PostsListSelectionCubit,
-                      PostsListSelectionState>(
+                  child: BlocConsumer<PostsListSelectionCubit, PostsListSelectionState>(
                     builder: (context, state) {
                       if (state is PostsListPostSelected) {
                         return PostDetails(
+                          // TODO: Visibility widget. Keep in tree.
                           postId: state.postId,
                         );
                       }

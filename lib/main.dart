@@ -27,7 +27,7 @@ void main() {
   runApp(
     MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<PostsRepository>(
+        RepositoryProvider<PostsRepository>( // TODO: Make non-singleton
           create: (context) => postsRepository,
         ),
         RepositoryProvider<CommentsRepository>(
@@ -36,7 +36,7 @@ void main() {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<PostsListCubit>(
+          BlocProvider<PostsListCubit>( // TODO: Provide only on-purpose
             create: (_) => PostsListCubit(postsRepository: postsRepository),
           ),
           BlocProvider<PostsListSelectionCubit>(

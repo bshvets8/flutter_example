@@ -16,8 +16,8 @@ class PostsApp extends StatelessWidget {
     final routes = {
       HomePage.routeName: (_) => HomePage(),
       cubit.PostsListPage.routeName: (_) => cubit.PostsListPage(),
-      cubit.PostDetailsPage.routeName: (_) => cubit.PostDetailsPage(),
-      mvvm.PostsListPage.routeName: (_) => mvvm.PostsListPage(),
+      cubit.PostDetailsPage.routeName: (_) => cubit.PostDetailsPage(), // TODO: Open user details/ about. Navigation from this screen.
+      mvvm.PostsListPage.routeName: (_) => mvvm.PostsListPage(), // TODO: Splash
       mvvm.PostDetailsPage.routeName: (_) => mvvm.PostDetailsPage()
     };
 
