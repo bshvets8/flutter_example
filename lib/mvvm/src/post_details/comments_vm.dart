@@ -8,23 +8,21 @@ import 'package:rxdart/rxdart.dart';
 class CommentsVM {
   final CommentsRepository _commentsRepository;
 
-  final BehaviorSubject<List<CommentModel>> _commentsSubject =
-      BehaviorSubject();
+  final BehaviorSubject<List<CommentModel>> _commentsSubject = BehaviorSubject();
 
   StreamSubscription _commentsSubscription;
 
-  CommentsVM({@required CommentsRepository commentsRepository})
-      : _commentsRepository = commentsRepository;
-
+  CommentsVM({@required CommentsRepository commentsRepository}) : _commentsRepository = commentsRepository;
 
   Stream<List<CommentModel>> get comments => _commentsSubject.stream;
 
-  void initWithPostId(int postId) {
-    _commentsSubscription =
-        _commentsRepository.getComments(postId).listen((comments) {
+  void setPostId(int postId) {
+    _commentsSubscription = _commentsRepository.getComments(postId).listen((comments) {
       _commentsSubject.sink.add(comments);
     });
+  }
 
+  void loadComments() {
     _commentsRepository.loadComments();
   }
 

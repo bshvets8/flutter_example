@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cubit/cubit/cubit.dart' as cubit;
-import 'package:flutter_cubit/mvvm/mvvm.dart' as mvvm;
+import 'package:flutter_cubit/cubit/cubit.dart';
+import 'package:flutter_cubit/mvvm/mvvm.dart';
 
 import 'home_page.dart';
 
@@ -15,10 +15,8 @@ class PostsApp extends StatelessWidget {
     final title = 'Flutter Architecture Example';
     final routes = {
       HomePage.routeName: (_) => HomePage(),
-      cubit.PostsListPage.routeName: (_) => cubit.PostsListPage(),
-      cubit.PostDetailsPage.routeName: (_) => cubit.PostDetailsPage(), // TODO: Open user details/ about. Navigation from this screen.
-      mvvm.PostsListPage.routeName: (_) => mvvm.PostsListPage(), // TODO: Splash
-      mvvm.PostDetailsPage.routeName: (_) => mvvm.PostDetailsPage()
+      CubitHomePage.routeName: (_) => CubitHomePage(),
+      MVVMHomePage.routeName: (_) => MVVMHomePage()
     };
 
     return Platform.isIOS

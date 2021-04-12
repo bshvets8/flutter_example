@@ -14,6 +14,7 @@ class PostDetailsCubit extends Cubit<PostDetailsState> {
         super(PostDetailsInitial());
 
   void setPostId(int postId) {
+    emit(PostDetailsLoading());
     _postsRepository.getPost(postId).listen((post) {
       emit(PostLoaded(post));
     })

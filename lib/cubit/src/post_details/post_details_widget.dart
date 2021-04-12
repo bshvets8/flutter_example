@@ -7,26 +7,12 @@ import 'comments_state.dart';
 import 'post_details_cubit.dart';
 import 'post_details_state.dart';
 
-// TODO: Rename to PostDetails"Widget".
-class PostDetails extends StatefulWidget {
-  final int postId;
-
-  const PostDetails({Key key, @required this.postId}) : super(key: key);
-
+class PostDetailsWidget extends StatefulWidget {
   @override
-  _PostDetailsState createState() => _PostDetailsState();
+  _PostDetailsWidgetState createState() => _PostDetailsWidgetState();
 }
 
-class _PostDetailsState extends State<PostDetails> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<PostDetailsCubit>(context).setPostId(widget.postId);
-    BlocProvider.of<CommentsCubit>(context)
-      ..setPostId(widget.postId)
-      ..loadComments();
-  }
-
+class _PostDetailsWidgetState extends State<PostDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostDetailsCubit, PostDetailsState>(
@@ -69,9 +55,19 @@ class _PostDetailsState extends State<PostDetails> {
           );
         }
 
+        if (state is PostDetailsLoading) {
+          return Container(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          );
+        }
+
         return Container(
           alignment: Alignment.center,
-          child: CircularProgressIndicator(),
+          child: Text(
+            'Select a Post',
+            textAlign: TextAlign.center,
+          ),
         );
       },
     );

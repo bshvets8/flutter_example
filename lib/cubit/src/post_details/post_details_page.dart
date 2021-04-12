@@ -1,9 +1,8 @@
-import 'dart:io';
+import 'package:flutter/widgets.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_cubit/cubit/cubit.dart';
+import 'post_details_widget.dart';
 
+// TODO: Open user details/ about. Navigation from this screen.
 class PostDetailsPage extends StatelessWidget {
   static const routeName = "/cubit/posts/details";
 
@@ -11,22 +10,6 @@ class PostDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postId = ModalRoute.of(context).settings.arguments; // TODO: Remove. Pass to cubit. Change only title
-    final body = PostDetails(postId: postId);
-
-    final title = Text('PostDetails');
-
-    return Platform.isIOS // TODO: Remove Scaffold recreation.
-        ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-            ),
-            child: body)
-        : Scaffold(
-            appBar: AppBar(
-              title: title,
-            ),
-            body: body,
-          );
+    return PostDetailsWidget();
   }
 }

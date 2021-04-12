@@ -4,11 +4,11 @@ import 'package:flutter_cubit/domain/models/models.dart';
 
 typedef ItemTapCallback = void Function(PostModel postModel);
 
-class PostsList extends StatelessWidget {
+class PostsListWidget extends StatelessWidget {
   final List<PostModel> _posts;
   final ItemTapCallback _itemTapCallback;
 
-  PostsList(
+  PostsListWidget(
       {@required List<PostModel> posts,
       @required ItemTapCallback itemTapCallback})
       : _posts = posts,

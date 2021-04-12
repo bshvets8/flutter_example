@@ -18,9 +18,7 @@ class CommentsCubit extends Cubit<CommentsState> {
       emit(CommentsLoaded(comments));
     })
       ..onError((e) => emit(CommentsLoadFailed()));
-  }
 
-  void loadComments() {
     _commentsRepository.loadComments();
   }
 }
