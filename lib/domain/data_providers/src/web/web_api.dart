@@ -11,13 +11,12 @@ class WebAPI {
     return _client.get(Uri.https("jsonplaceholder.typicode.com", "posts"));
   }
 
-  Future<Response> getPost(int postId) {
-    return _client.get(Uri.https(
-        "jsonplaceholder.typicode.com", "posts", {"id": postId.toString()}));
-  }
-
   Future<Response> getComments() {
     return _client.get(Uri.https("jsonplaceholder.typicode.com", "comments"));
+  }
+
+  Future<Response> getUsers() {
+    return _client.get(Uri.https("jsonplaceholder.typicode.com", "users"));
   }
 
   void dispose() {

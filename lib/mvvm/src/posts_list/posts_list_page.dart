@@ -29,7 +29,7 @@ class _PostsListPageState extends State<PostsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final postsListVM = Provider.of<PostsListVM>(context, listen: false);
+    final postsListVM = Provider.of<PostsListVM>(context, listen: false); // Review: Use Change Notifier. Discover Provider lib. Add init to VM
 
     return StreamBuilder<List<PostModel>>(
       initialData: [],

@@ -21,10 +21,11 @@ class CubitHomePage extends StatefulWidget {
   _CubitHomePageState createState() => _CubitHomePageState();
 }
 
+// Review: Replace with Stateless
 class _CubitHomePageState extends State<CubitHomePage> {
   final navigatorKey = GlobalKey<NavigatorState>();
 
-  PostsRepository _postsRepository;
+  PostsRepository _postsRepository; // Review: Centralize initiation (Class or widget) abstract factory. Singleton factory
   CommentsRepository _commentsRepository;
 
   @override

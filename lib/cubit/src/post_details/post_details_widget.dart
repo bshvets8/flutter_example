@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/widgets/src/user_title_widget.dart';
 
 import 'comments_cubit.dart';
 import 'comments_state.dart';
@@ -21,6 +22,13 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
           final postModel = state.postModel;
           return Column(
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: UserTitleWidget(username: 'some_user'),
+                ),
+              ),
               SizedBox(height: 16),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
