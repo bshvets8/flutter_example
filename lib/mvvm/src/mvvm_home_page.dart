@@ -21,27 +21,6 @@ class MVVMHomePage extends StatefulWidget {
 class _MVVMHomePageState extends State<MVVMHomePage> {
   final navigatorKey = GlobalKey<NavigatorState>();
 
-  PostsRepository _postsRepository;
-  CommentsRepository _commentsRepository;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final WebDataProvider webDataProvider = JsonPlaceholderWebDataProvider(WebAPI(Client()));
-    final LocalDataProvider localDataProvider = InMemoryDataProvider();
-
-    _postsRepository = PostsRepositoryImpl(
-      webDataProvider: webDataProvider,
-      localDataProvider: localDataProvider,
-    );
-
-    _commentsRepository = CommentsRepositoryImpl(
-      webDataProvider: webDataProvider,
-      localDataProvider: localDataProvider,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final body = WillPopScope(
@@ -52,7 +31,7 @@ class _MVVMHomePageState extends State<MVVMHomePage> {
         onGenerateRoute: (settings) {
           WidgetBuilder pageBuilder;
           if (settings.name == PostDetailsPage.routeName) {
-            pageBuilder = (_) => PostDetailsPage();
+            pageBuilder = (_) => PostDetailsPage(postId: settings.arguments);
           }
 
           if (settings.name == PostsListPage.routeName) {
@@ -81,16 +60,22 @@ class _MVVMHomePageState extends State<MVVMHomePage> {
             body: body,
           );
 
+    // REVIEW: Create inside widget
     return MultiProvider(
       providers: [
-        Provider<PostsListVM>(
-          create: (context) => PostsListVM(postsRepository: _postsRepository),
+        Provider<WebDataProvider>(
+          create: (context) => JsonPlaceholderWebDataProvider(WebAPI(Client())),
         ),
-        Provider<PostDetailsVM>(
-          create: (context) => PostDetailsVM(postsRepository: _postsRepository),
+        Provider<LocalDataProvider>(
+          create: (context) => InMemoryDataProvider(),
         ),
-        Provider<CommentsVM>(
-          create: (context) => CommentsVM(commentsRepository: _commentsRepository),
+        ProxyProvider2<WebDataProvider, LocalDataProvider, PostsRepository>(
+          update: (context, webDataProvider, localDataProvider, previous) =>
+              PostsRepositoryImpl(webDataProvider: webDataProvider, localDataProvider: localDataProvider),
+        ),
+        ProxyProvider2<WebDataProvider, LocalDataProvider, CommentsRepository>(
+          update: (context, webDataProvider, localDataProvider, previous) =>
+              CommentsRepositoryImpl(webDataProvider: webDataProvider, localDataProvider: localDataProvider),
         ),
       ],
       child: scaffold,

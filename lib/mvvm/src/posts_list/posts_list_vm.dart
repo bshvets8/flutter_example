@@ -1,22 +1,64 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 
-class PostsListVM {
+class PostsListVM extends ChangeNotifier {
   final PostsRepository _postsRepository;
+
+  StreamSubscription _streamSubscription;
+
+  List<PostModel> _posts = [];
+  bool _isInitializing;
+  int _selectedPostId;
+
+  List<PostModel> get posts => _posts;
+
+  bool get isInitializing => _isInitializing;
+
+  int get selectedPostId => _selectedPostId;
 
   PostsListVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository;
 
-  Stream<List<PostModel>> get posts => _postsRepository.posts();
+  void init() {
+    _isInitializing = true;
 
-  // Review: Make private
-  // Review: pass id through arguments/constructor
-  // Review: Sqlite. Encrypted databases / Reactive interface. Use different approaches. In memory-database.\
+    _posts = [];
+    notifyListeners();
 
-  // Review: Try to create base viewmodel and base widget to provide it.
-  // Review: Concrete widgets should listen to concrete properties.
-  // Review: Expose only constructor, init method, getters.
-  void loadPosts() {
-    _postsRepository.loadPosts();
+    _streamSubscription?.cancel();
+    _streamSubscription = _postsRepository.posts().listen((posts) {
+      _isInitializing = false;
+      _posts = posts;
+      notifyListeners();
+    });
+
+    _loadPosts();
+  }
+
+  Future<void> refreshList() => _loadPosts();
+
+  Future<void> _loadPosts() => _postsRepository.loadPosts();
+
+  void selectPostId(int postId) {
+    _selectedPostId = postId;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 }
+// Review: Use Change Notifier. Discover Provider lib. Add init to VM
+
+// Review: pass id through navigator arguments/constructor
+// Review: Sqlite. Encrypted databases / Reactive interface. Use different approaches. In memory-database.
+// Review: Repository is responsible only for preparing data.
+// Review: Create separate viewmodel for separate screen.
+
+// Review: Try to create base viewmodel and base widget to provide it.
+// Review: Concrete widgets should listen to concrete properties.
+// Review: Expose only constructor, init method, getters.

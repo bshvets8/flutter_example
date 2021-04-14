@@ -14,10 +14,10 @@ class PostsRepositoryImpl extends PostsRepository {
 
   Stream<List<PostModel>> posts() => localDataProvider.posts();
 
-  Stream<PostModel> getPost(int postId) => posts()
-      .map((posts) => posts.firstWhere((element) => element.id == postId));
+  Stream<PostModel> getPost(int postId) =>
+      posts().map((posts) => posts.firstWhere((element) => element.id == postId, orElse: () => null));
 
-  void loadPosts() async {
+  Future<void> loadPosts() async {
     final posts = await webDataProvider.getPosts();
     localDataProvider.setPosts(posts);
   }

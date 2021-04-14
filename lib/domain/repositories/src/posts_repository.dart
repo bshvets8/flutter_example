@@ -5,7 +5,7 @@ abstract class PostsRepository {
 
   Stream<PostModel> getPost(int postId);
 
-  void loadPosts();
+  Future<void> loadPosts();
 
   void dispose();
 }

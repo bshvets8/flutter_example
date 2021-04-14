@@ -3,33 +3,49 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
-import 'package:rxdart/rxdart.dart';
 
-class PostDetailsVM {
+class PostDetailsVM extends ChangeNotifier {
   final PostsRepository _postsRepository;
 
-  final BehaviorSubject<PostModel> _postSubject = BehaviorSubject();
-  final BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject()..add(false);
+  int _postId;
 
-  StreamSubscription _postSubscription;
+  bool _isInitializing = false;
+  PostModel _post;
+
+  bool get isInitializing => _isInitializing;
+
+  int get postId => _postId;
+
+  bool get isPostSelected => _post != null;
+
+  String get postTitle => _post.title;
+
+  String get postBody => _post.body;
+
+  StreamSubscription _streamSubscription;
 
   PostDetailsVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository;
 
-  Stream<PostModel> get post => _postSubject.stream;
+  void init({@required int postId}) {
+    _postId = postId;
 
-  Stream<bool> get isLoading => _isLoadingSubject.stream;
+    _isInitializing = true;
+    _post = null;
+    _streamSubscription?.cancel();
 
-  void setPostId(int postId) {
-    _isLoadingSubject.add(true);
-    _postSubscription = _postsRepository.getPost(postId).listen((post) {
-      _postSubject.sink.add(post);
-      _isLoadingSubject.add(false);
+    notifyListeners();
+
+    _streamSubscription = _postsRepository.getPost(_postId).listen((postModel) {
+      _isInitializing = false;
+      _post = postModel;
+
+      notifyListeners();
     });
   }
 
+  @override
   void dispose() {
-    _isLoadingSubject.close();
-    _postSubject.close();
-    _postSubscription.cancel();
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 }
