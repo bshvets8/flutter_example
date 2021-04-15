@@ -44,6 +44,8 @@ class PostsListPage extends StatelessWidget {
     );
   }
 
+
+  // REVIEW: Try to create heavy widget with widgets. Check if lagging during scroll
   Widget _buildPostsList() {
     return Builder(
       builder: (context) => RefreshIndicator(
@@ -60,6 +62,10 @@ class PostsListPage extends StatelessWidget {
             return PostsListWidget(
               posts: postsListVM.posts,
               itemTapCallback: (postModel) {
+                // REVIEW: Do not reselect on same id
+                // REVIEW: User context.select
+                // REVIEW: Use library for navigation
+                // REVIEW: Try deeplinks. On start - open post
                 postsListVM.selectPostId(postModel.id);
 
                 if (!MediaQuery.of(context).isTablet()) {

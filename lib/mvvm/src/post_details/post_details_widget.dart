@@ -14,10 +14,14 @@ class PostDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // REVIEW: Try to change to simple ChangeNotifierProvider
+    // REVIEW: Create instance in "create". Investigate if it helps
+    // REVIEW: Check if VM is persisted between rebuilds
     return ChangeNotifierProxyProvider<PostsRepository, PostDetailsVM>(
       create: null,
-      update: (context, postsRepository, previous) =>
-          PostDetailsVM(postsRepository: postsRepository)..init(postId: postId),
+      update: (context, postsRepository, previous) {
+         return PostDetailsVM(postsRepository: postsRepository)..init(postId: postId);
+      },
       child: Consumer<PostDetailsVM>(
         builder: (context, postDetailsVM, child) {
           if (postDetailsVM.isInitializing) {

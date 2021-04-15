@@ -10,31 +10,31 @@ class PostsListVM extends ChangeNotifier {
   StreamSubscription _streamSubscription;
 
   List<PostModel> _posts = [];
-  bool _isInitializing;
-  int _selectedPostId;
+  bool _isInitializing = true;
+  int _selectedPostId = -1;
 
   List<PostModel> get posts => _posts;
+
+  String get errorMessage or message; // REVIEW: Handle error
 
   bool get isInitializing => _isInitializing;
 
   int get selectedPostId => _selectedPostId;
 
-  PostsListVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository;
+  PostsListVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository {
+
+  }
 
   void init() {
-    _isInitializing = true;
-
-    _posts = [];
-    notifyListeners();
-
-    _streamSubscription?.cancel();
+    _streamSubscription?.cancel(); // REVIEW: Add assert for single call
     _streamSubscription = _postsRepository.posts().listen((posts) {
       _isInitializing = false;
       _posts = posts;
       notifyListeners();
-    });
+    })..onError() // REVIEW: Handle error;
 
-    _loadPosts();
+    _loadPosts(); // REVIEW: Remove and auto handle in repository
+    // REVIEW: Highlight selected post on list. For table only
   }
 
   Future<void> refreshList() => _loadPosts();

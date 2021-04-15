@@ -21,6 +21,7 @@ class DependenciesProviderWidget extends StatelessWidget {
         Provider<LocalDataProvider>(
           create: (context) => InMemoryDataProvider(),
         ),
+        // REVIEW: Register factory
         ProxyProvider2<WebDataProvider, LocalDataProvider, PostsRepository>(
           update: (context, webDataProvider, localDataProvider, previous) =>
               PostsRepositoryImpl(webDataProvider: webDataProvider, localDataProvider: localDataProvider),

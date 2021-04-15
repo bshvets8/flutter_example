@@ -87,6 +87,7 @@ class _CubitHomePageState extends State<CubitHomePage> {
 
     return MultiBlocProvider(
       providers: [
+        // REVIEW: Provide per page. Avoid boilerplate
         BlocProvider<PostsListCubit>(
           create: (context) => PostsListCubit(postsRepository: _postsRepository),
         ),

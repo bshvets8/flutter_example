@@ -37,6 +37,7 @@ class _PostsListPageState extends State<PostsListPage> {
           final postsList = _buildPostsList(context, posts: state.posts, itemTapCallback: (post) {
             BlocProvider.of<PostDetailsCubit>(context).setPostId(post.id);
             BlocProvider.of<CommentsCubit>(context).setPostId(post.id);
+            context.
             if (!isTablet) {
               Navigator.of(context).pushNamed(PostDetailsPage.routeName);
             }
