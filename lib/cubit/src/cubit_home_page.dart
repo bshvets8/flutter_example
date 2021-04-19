@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/data_providers/src/db/posts_database.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -32,17 +33,17 @@ class _CubitHomePageState extends State<CubitHomePage> {
   void initState() {
     super.initState();
 
-    final WebDataProvider webDataProvider = JsonPlaceholderWebDataProvider(WebAPI(Client()));
-    final LocalDataProvider localDataProvider = InMemoryDataProvider();
+    final WebDataSource webDataProvider = JsonPlaceholderWebDataSource(WebAPI(Client()));
+    final DatabaseDataSource databaseDataSource = DatabaseDataSourceImpl(PostsDatabase());
 
     _postsRepository = PostsRepositoryImpl(
       webDataProvider: webDataProvider,
-      localDataProvider: localDataProvider,
+      databaseDataSource: databaseDataSource,
     );
 
     _commentsRepository = CommentsRepositoryImpl(
-      webDataProvider: webDataProvider,
-      localDataProvider: localDataProvider,
+      webDataSource: webDataProvider,
+      databaseDataSource: databaseDataSource,
     );
   }
 

@@ -13,13 +13,13 @@ class PostsListCubit extends Cubit<PostsListState> {
       : _postsRepository = postsRepository,
         super(PostsListInitial()) {
     _streamSubscription = _postsRepository
-        .posts()
+        .getPosts()
         .listen((posts) => emit(PostsListLoaded(posts)))
           ..onError((e) => emit(PostsListLoadFailure()));
   }
 
   void loadPosts() {
-    _postsRepository.loadPosts();
+    _postsRepository.getPosts(forceFetch: true);
   }
 
   @override

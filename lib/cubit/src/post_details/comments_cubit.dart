@@ -14,11 +14,9 @@ class CommentsCubit extends Cubit<CommentsState> {
         super(CommentsStateInitial());
 
   void setPostId(int postId) {
-    _commentsRepository.getComments(postId).listen((comments) {
+    _commentsRepository.getComments(postId: postId).listen((comments) {
       emit(CommentsLoaded(comments));
     })
       ..onError((e) => emit(CommentsLoadFailed()));
-
-    _commentsRepository.loadComments();
   }
 }

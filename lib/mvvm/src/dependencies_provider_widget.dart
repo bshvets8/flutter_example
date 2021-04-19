@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/data_providers/src/db/posts_database.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -15,20 +16,21 @@ class DependenciesProviderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<WebDataProvider>(
-          create: (context) => JsonPlaceholderWebDataProvider(WebAPI(Client())),
+        Provider<WebDataSource>(
+          create: (context) => JsonPlaceholderWebDataSource(WebAPI(Client())),
         ),
-        Provider<LocalDataProvider>(
-          create: (context) => InMemoryDataProvider(),
+        Provider<DatabaseDataSource>(
+          create: (context) => DatabaseDataSourceImpl(PostsDatabase()),
+          dispose: (context, value) => value.dispose(),
         ),
         // REVIEW: Register factory
-        ProxyProvider2<WebDataProvider, LocalDataProvider, PostsRepository>(
-          update: (context, webDataProvider, localDataProvider, previous) =>
-              PostsRepositoryImpl(webDataProvider: webDataProvider, localDataProvider: localDataProvider),
+        ProxyProvider2<WebDataSource, DatabaseDataSource, PostsRepository>(
+          update: (context, webDataProvider, databaseDataSource, previous) =>
+              PostsRepositoryImpl(webDataProvider: webDataProvider, databaseDataSource: databaseDataSource),
         ),
-        ProxyProvider2<WebDataProvider, LocalDataProvider, CommentsRepository>(
-          update: (context, webDataProvider, localDataProvider, previous) =>
-              CommentsRepositoryImpl(webDataProvider: webDataProvider, localDataProvider: localDataProvider),
+        ProxyProvider2<WebDataSource, DatabaseDataSource, CommentsRepository>(
+          update: (context, webDataProvider, databaseDataSource, previous) =>
+              CommentsRepositoryImpl(webDataSource: webDataProvider, databaseDataSource: databaseDataSource),
         ),
       ],
       child: _child,

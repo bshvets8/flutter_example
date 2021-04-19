@@ -7,23 +7,30 @@ import 'package:flutter_cubit/domain/models/models.dart';
 import 'posts_repository.dart';
 
 class PostsRepositoryImpl extends PostsRepository {
-  final WebDataProvider webDataProvider;
-  final LocalDataProvider localDataProvider;
+  final WebDataSource webDataProvider;
+  final DatabaseDataSource databaseDataSource;
 
-  // REVIEW:
-  PostsRepositoryImpl({@required this.webDataProvider, this.localDataProvider});
+  PostsRepositoryImpl({@required this.webDataProvider, this.databaseDataSource});
 
-  Stream<List<PostModel>> posts() => localDataProvider.posts();
+  @override
+  Stream<List<PostModel>> getPosts({bool forceFetch = false}) async* {
+    if (forceFetch || !await databaseDataSource.hasPosts) {
+      await _loadPosts();
+    }
 
+    yield* databaseDataSource.getPosts();
+  }
+
+  @override
   Stream<PostModel> getPost(int postId) =>
-      posts().map((posts) => posts.firstWhere((element) => element.id == postId, orElse: () => null));
+      getPosts().map((posts) => posts.firstWhere((element) => element.id == postId, orElse: () => null));
 
-  Future<void> loadPosts() async {
+  Future<void> _loadPosts() async {
     final posts = await webDataProvider.getPosts();
-    localDataProvider.setPosts(posts);
+    await databaseDataSource.deletePosts();
+    await databaseDataSource.insertPosts(posts);
   }
 
-  void dispose() {
-    webDataProvider.dispose();
-  }
+  @override
+  void dispose() {}
 }

@@ -1,9 +1,7 @@
 import 'package:flutter_cubit/domain/models/models.dart';
 
-abstract class CommentsRepository {
-  Stream<List<CommentModel>> comments();
+import 'repository.dart';
 
-  Stream<List<CommentModel>> getComments(int postId);
-
-  void loadComments();
+abstract class CommentsRepository extends Repository {
+  Stream<List<CommentModel>> getComments({int postId, bool forceFetch = false});
 }

@@ -5,45 +5,71 @@ import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 
 class PostsListVM extends ChangeNotifier {
+  static const _defaultSelectedPostId = -1;
+
+  bool _isInitCalled = false;
+
   final PostsRepository _postsRepository;
 
   StreamSubscription _streamSubscription;
 
   List<PostModel> _posts = [];
   bool _isInitializing = true;
-  int _selectedPostId = -1;
+  int _selectedPostId = _defaultSelectedPostId;
 
   List<PostModel> get posts => _posts;
 
-  String get errorMessage or message; // REVIEW: Handle error
+  String _errorMessage;
+
+  String get errorMessage => _errorMessage;
 
   bool get isInitializing => _isInitializing;
 
   int get selectedPostId => _selectedPostId;
 
-  PostsListVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository {
-
-  }
+  PostsListVM({@required PostsRepository postsRepository}) : _postsRepository = postsRepository;
 
   void init() {
-    _streamSubscription?.cancel(); // REVIEW: Add assert for single call
-    _streamSubscription = _postsRepository.posts().listen((posts) {
-      _isInitializing = false;
-      _posts = posts;
-      notifyListeners();
-    })..onError() // REVIEW: Handle error;
+    assert(!_isInitCalled, '$runtimeType was initialized more than once'); // DONE: Add assert for single call
+    _isInitCalled = true;
 
-    _loadPosts(); // REVIEW: Remove and auto handle in repository
-    // REVIEW: Highlight selected post on list. For table only
+    _loadPosts();
+
+    // REVIEW: Highlight selected post on list. For tablet only
   }
 
-  Future<void> refreshList() => _loadPosts();
-
-  Future<void> _loadPosts() => _postsRepository.loadPosts();
+  Future<void> refreshList() {
+    return _loadPosts(forceRefresh: true);
+  }
 
   void selectPostId(int postId) {
     _selectedPostId = postId;
     notifyListeners();
+  }
+
+  Future<void> _loadPosts({bool forceRefresh = false}) {
+    Completer completer = Completer();
+    _streamSubscription?.cancel();
+    _streamSubscription = _postsRepository.getPosts(forceFetch: forceRefresh).listen((posts) {
+      _isInitializing = false;
+      _errorMessage = null;
+      _posts = posts;
+
+      if (!completer.isCompleted)
+        completer.complete();
+
+      notifyListeners();
+    })..onError((error) {
+      _isInitializing = false;
+      _errorMessage = error.toString();
+
+      if (!completer.isCompleted)
+        completer.complete();
+
+      notifyListeners();
+    });
+
+    return completer.future;
   }
 
   @override
@@ -52,13 +78,13 @@ class PostsListVM extends ChangeNotifier {
     super.dispose();
   }
 }
-// Review: Use Change Notifier. Discover Provider lib. Add init to VM
+// Done: Use Change Notifier. Discover Provider lib. Add init to VM
 
-// Review: pass id through navigator arguments/constructor
+// Done: pass id through navigator arguments/constructor
 // Review: Sqlite. Encrypted databases / Reactive interface. Use different approaches. In memory-database.
 // Review: Repository is responsible only for preparing data.
-// Review: Create separate viewmodel for separate screen.
+// DONE: Create separate viewmodel for separate screen.
 
-// Review: Try to create base viewmodel and base widget to provide it.
-// Review: Concrete widgets should listen to concrete properties.
-// Review: Expose only constructor, init method, getters.
+// Done: Try to create base viewmodel and base widget to provide it.
+// Done: Concrete widgets should listen to concrete properties.
+// Done: Expose only constructor, init method, getters.

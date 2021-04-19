@@ -1,7 +1,7 @@
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/models/src/user_model.dart';
 
-abstract class WebDataProvider {
+abstract class WebDataSource {
   Future<List<PostModel>> getPosts();
 
   Future<List<CommentModel>> getComments();

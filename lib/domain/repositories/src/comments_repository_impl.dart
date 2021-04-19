@@ -4,19 +4,28 @@ import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 
 class CommentsRepositoryImpl extends CommentsRepository {
-  final WebDataProvider webDataProvider;
-  final LocalDataProvider localDataProvider;
+  final WebDataSource webDataSource;
+  final DatabaseDataSource databaseDataSource;
 
-  CommentsRepositoryImpl(
-      {@required this.webDataProvider, @required this.localDataProvider});
+  CommentsRepositoryImpl({@required this.webDataSource, @required this.databaseDataSource});
 
-  Stream<List<CommentModel>> comments() => localDataProvider.comments();
+  @override
+  Stream<List<CommentModel>> getComments({int postId, bool forceFetch = false}) async* {
+    if (forceFetch || !await databaseDataSource.hasComments) {
+      await _loadComments();
+    }
 
-  Stream<List<CommentModel>> getComments(int postId) => comments().map(
-      (list) => list.where((element) => element.postId == postId).toList());
-
-  void loadComments() async {
-    final comments = await webDataProvider.getComments();
-    localDataProvider.setComments(comments);
+    yield* databaseDataSource
+        .getComments()
+        .map((list) => postId == null ? list : list.where((element) => element.postId == postId).toList());
   }
+
+  Future<void> _loadComments() async {
+    final comments = await webDataSource.getComments();
+    await databaseDataSource.deleteComments();
+    await databaseDataSource.insertComments(comments);
+  }
+
+  @override
+  void dispose() {}
 }

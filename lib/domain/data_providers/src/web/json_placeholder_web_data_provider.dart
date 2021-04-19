@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'web_api.dart';
 import 'web_data_provider.dart';
 
-class JsonPlaceholderWebDataProvider extends WebDataProvider {
+class JsonPlaceholderWebDataSource extends WebDataSource {
   final WebAPI webApi;
 
-  JsonPlaceholderWebDataProvider(this.webApi);
+  JsonPlaceholderWebDataSource(this.webApi);
 
   Future<List<PostModel>> getPosts() async {
     final response = await webApi.getPosts();

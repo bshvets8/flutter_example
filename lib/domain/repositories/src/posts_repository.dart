@@ -1,14 +1,12 @@
 import 'package:flutter_cubit/domain/models/models.dart';
 
-abstract class PostsRepository {
-  // REVIEW: Create base repository. add dispose
-  // REVIEW: Rename to getPosts or get method
-  // REVIEW: Add 'force' argument to invalidate data in db
-  Stream<List<PostModel>> posts();
+import 'repository.dart';
+
+abstract class PostsRepository extends Repository {
+  // DONE: Create base repository. add dispose
+  // DONE: Rename to getPosts or get method
+  // DONE: Add 'force' argument to invalidate data in db
+  Stream<List<PostModel>> getPosts({bool forceFetch = false});
 
   Stream<PostModel> getPost(int postId);
-
-  Future<void> loadPosts();
-
-  void dispose();
 }

@@ -3,12 +3,12 @@ import 'package:flutter_cubit/domain/repositories/src/users_repository.dart';
 
 class UsersRepositoryImpl extends UsersRepository {
 
-  Stream<List<UserModel>> users() {
+  Stream<List<UserModel>> getUsers() {
 
   }
 
   Stream<UserModel> getUser(int userId) {
-    return users().map((users) => users.firstWhere((element) => element.id == userId));
+    return getUsers().map((users) => users.firstWhere((element) => element.id == userId));
   }
 
   void loadUsers() {
