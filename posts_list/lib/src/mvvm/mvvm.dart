@@ -1,0 +1,1 @@
+export 'src/mvvm_home_page.dart';

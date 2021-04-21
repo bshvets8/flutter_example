@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/widgets/widgets.dart';
+import 'package:posts_list/posts_list.dart';
 
-import 'cubit/cubit.dart';
-import 'mvvm/mvvm.dart';
+import 'adaptive_button.dart';
 
 class HomePage extends StatelessWidget {
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -42,7 +41,9 @@ class HomePage extends StatelessWidget {
               return null;
           }
 
-          return Platform.isIOS ? CupertinoPageRoute(builder: pageBuilder) : MaterialPageRoute(builder: pageBuilder);
+          return Platform.isIOS
+              ? CupertinoPageRoute(builder: pageBuilder, settings: settings)
+              : MaterialPageRoute(builder: pageBuilder, settings: settings);
         },
       ),
     );
@@ -85,7 +86,11 @@ class HomeWidget extends StatelessWidget {
             ),
           ),
           AdaptiveButton(
-            onPressed: () => Navigator.of(context).pushNamed(MVVMHomePage.routeName),
+            onPressed: () => Navigator.of(context)
+                .pushNamed(MVVMHomePage.routeName)
+                .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value))))
+                .onError(
+                    (error, stackTrace) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)))),
             child: Text(
               "MVVM",
               style: TextStyle(color: Colors.white),
