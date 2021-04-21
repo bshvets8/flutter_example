@@ -11,10 +11,10 @@ import 'tables/posts_table.dart';
 part 'posts_database.g.dart';
 
 // Review: Add migration: Add column Posts.id1. copy value from id. Use id1 instead of id
-@UseMoor(tables: [Posts, Comments])
+@UseMoor(tables: [Posts, Comments], include: {'migration.moor'})
 class PostsDatabase extends _$PostsDatabase {
   static const _databaseName = 'posts.db';
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 2;
 
   PostsDatabase() : super(_openConnection());
 
@@ -28,6 +28,20 @@ class PostsDatabase extends _$PostsDatabase {
 
   @override
   int get schemaVersion => _databaseVersion;
+
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (migrator) => migrator.createAll(),
+        onUpgrade: (migrator, from, to) async {
+          if (from == 1) {
+            await migrator.addColumn(posts, posts.id1);
+          }
+        },
+        beforeOpen: (openingDetails) async {
+          if (openingDetails.hadUpgrade && openingDetails.versionBefore == 1) {
+            await migrateFrom1to2();
+          }
+        },
+      );
 
   Stream<List<Post>> getPosts() {
     return select(posts).watch();

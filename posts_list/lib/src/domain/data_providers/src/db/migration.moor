@@ -1,0 +1,2 @@
+migrateFrom1to2:
+    update posts set id1 = id;

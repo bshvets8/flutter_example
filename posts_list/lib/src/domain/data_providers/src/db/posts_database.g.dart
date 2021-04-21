@@ -9,11 +9,13 @@ part of 'posts_database.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Post extends DataClass implements Insertable<Post> {
   final int id;
+  final int id1;
   final int userId;
   final String title;
   final String body;
   Post(
       {@required this.id,
+      @required this.id1,
       @required this.userId,
       @required this.title,
       @required this.body});
@@ -24,6 +26,7 @@ class Post extends DataClass implements Insertable<Post> {
     final stringType = db.typeSystem.forDartType<String>();
     return Post(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      id1: intType.mapFromDatabaseResponse(data['${effectivePrefix}id1']),
       userId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}user_id']),
       title:
@@ -36,6 +39,9 @@ class Post extends DataClass implements Insertable<Post> {
     final map = <String, Expression>{};
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || id1 != null) {
+      map['id1'] = Variable<int>(id1);
     }
     if (!nullToAbsent || userId != null) {
       map['user_id'] = Variable<int>(userId);
@@ -52,6 +58,7 @@ class Post extends DataClass implements Insertable<Post> {
   PostsCompanion toCompanion(bool nullToAbsent) {
     return PostsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      id1: id1 == null && nullToAbsent ? const Value.absent() : Value(id1),
       userId:
           userId == null && nullToAbsent ? const Value.absent() : Value(userId),
       title:
@@ -65,6 +72,7 @@ class Post extends DataClass implements Insertable<Post> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Post(
       id: serializer.fromJson<int>(json['id']),
+      id1: serializer.fromJson<int>(json['id1']),
       userId: serializer.fromJson<int>(json['userId']),
       title: serializer.fromJson<String>(json['title']),
       body: serializer.fromJson<String>(json['body']),
@@ -75,14 +83,17 @@ class Post extends DataClass implements Insertable<Post> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'id1': serializer.toJson<int>(id1),
       'userId': serializer.toJson<int>(userId),
       'title': serializer.toJson<String>(title),
       'body': serializer.toJson<String>(body),
     };
   }
 
-  Post copyWith({int id, int userId, String title, String body}) => Post(
+  Post copyWith({int id, int id1, int userId, String title, String body}) =>
+      Post(
         id: id ?? this.id,
+        id1: id1 ?? this.id1,
         userId: userId ?? this.userId,
         title: title ?? this.title,
         body: body ?? this.body,
@@ -91,6 +102,7 @@ class Post extends DataClass implements Insertable<Post> {
   String toString() {
     return (StringBuffer('Post(')
           ..write('id: $id, ')
+          ..write('id1: $id1, ')
           ..write('userId: $userId, ')
           ..write('title: $title, ')
           ..write('body: $body')
@@ -99,13 +111,16 @@ class Post extends DataClass implements Insertable<Post> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(userId.hashCode, $mrjc(title.hashCode, body.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(id1.hashCode,
+          $mrjc(userId.hashCode, $mrjc(title.hashCode, body.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Post &&
           other.id == this.id &&
+          other.id1 == this.id1 &&
           other.userId == this.userId &&
           other.title == this.title &&
           other.body == this.body);
@@ -113,17 +128,20 @@ class Post extends DataClass implements Insertable<Post> {
 
 class PostsCompanion extends UpdateCompanion<Post> {
   final Value<int> id;
+  final Value<int> id1;
   final Value<int> userId;
   final Value<String> title;
   final Value<String> body;
   const PostsCompanion({
     this.id = const Value.absent(),
+    this.id1 = const Value.absent(),
     this.userId = const Value.absent(),
     this.title = const Value.absent(),
     this.body = const Value.absent(),
   });
   PostsCompanion.insert({
     this.id = const Value.absent(),
+    this.id1 = const Value.absent(),
     @required int userId,
     @required String title,
     @required String body,
@@ -132,12 +150,14 @@ class PostsCompanion extends UpdateCompanion<Post> {
         body = Value(body);
   static Insertable<Post> custom({
     Expression<int> id,
+    Expression<int> id1,
     Expression<int> userId,
     Expression<String> title,
     Expression<String> body,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (id1 != null) 'id1': id1,
       if (userId != null) 'user_id': userId,
       if (title != null) 'title': title,
       if (body != null) 'body': body,
@@ -146,11 +166,13 @@ class PostsCompanion extends UpdateCompanion<Post> {
 
   PostsCompanion copyWith(
       {Value<int> id,
+      Value<int> id1,
       Value<int> userId,
       Value<String> title,
       Value<String> body}) {
     return PostsCompanion(
       id: id ?? this.id,
+      id1: id1 ?? this.id1,
       userId: userId ?? this.userId,
       title: title ?? this.title,
       body: body ?? this.body,
@@ -162,6 +184,9 @@ class PostsCompanion extends UpdateCompanion<Post> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (id1.present) {
+      map['id1'] = Variable<int>(id1.value);
     }
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
@@ -179,6 +204,7 @@ class PostsCompanion extends UpdateCompanion<Post> {
   String toString() {
     return (StringBuffer('PostsCompanion(')
           ..write('id: $id, ')
+          ..write('id1: $id1, ')
           ..write('userId: $userId, ')
           ..write('title: $title, ')
           ..write('body: $body')
@@ -198,6 +224,15 @@ class $PostsTable extends Posts with TableInfo<$PostsTable, Post> {
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _id1Meta = const VerificationMeta('id1');
+  GeneratedIntColumn _id1;
+  @override
+  GeneratedIntColumn get id1 => _id1 ??= _constructId1();
+  GeneratedIntColumn _constructId1() {
+    return GeneratedIntColumn('id1', $tableName, false,
+        defaultValue: Constant(-1));
   }
 
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
@@ -237,7 +272,7 @@ class $PostsTable extends Posts with TableInfo<$PostsTable, Post> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, userId, title, body];
+  List<GeneratedColumn> get $columns => [id, id1, userId, title, body];
   @override
   $PostsTable get asDslTable => this;
   @override
@@ -251,6 +286,10 @@ class $PostsTable extends Posts with TableInfo<$PostsTable, Post> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('id1')) {
+      context.handle(
+          _id1Meta, id1.isAcceptableOrUnknown(data['id1'], _id1Meta));
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
@@ -619,6 +658,15 @@ abstract class _$PostsDatabase extends GeneratedDatabase {
   $PostsTable get posts => _posts ??= $PostsTable(this);
   $CommentsTable _comments;
   $CommentsTable get comments => _comments ??= $CommentsTable(this);
+  Future<int> migrateFrom1to2() {
+    return customUpdate(
+      'update posts set id1 = id',
+      variables: [],
+      updates: {},
+      updateKind: UpdateKind.delete,
+    );
+  }
+
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
