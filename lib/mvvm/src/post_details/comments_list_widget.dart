@@ -4,6 +4,8 @@ import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:flutter_cubit/mvvm/mvvm.dart';
 import 'package:provider/provider.dart';
 
+import '../posts_factory.dart';
+
 class CommentsWidget extends StatelessWidget {
   final int postId;
 
@@ -11,10 +13,10 @@ class CommentsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProxyProvider<CommentsRepository, CommentsListVM>(
-      create: null,
-      update: (context, commentsRepository, previous) =>
-          CommentsListVM(commentsRepository: commentsRepository)..init(postId: postId),
+    return ChangeNotifierProvider<CommentsListVM>(
+      create: (context) => CommentsListVM(
+          commentsRepository: Provider.of<PostsModuleFactory>(context, listen: false).getCommentsRepository())
+        ..init(postId: postId),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

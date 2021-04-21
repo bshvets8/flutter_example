@@ -11,28 +11,31 @@ import 'home_page.dart';
 class PostsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final initialRoute = HomePage.routeName;
+    // final initialRoute = HomePage.routeName;
+    // final routes = {
+    //   HomePage.routeName: (_) => HomePage(),
+    //   CubitHomePage.routeName: (_) => CubitHomePage(),
+    //   MVVMHomePage.routeName: (_) => MVVMHomePage()
+    // };
+
     final title = 'Flutter Architecture Example';
-    final routes = {
-      HomePage.routeName: (_) => HomePage(),
-      CubitHomePage.routeName: (_) => CubitHomePage(),
-      MVVMHomePage.routeName: (_) => MVVMHomePage()
-    };
 
     return Platform.isIOS
         ? CupertinoApp(
+            home: HomePage(),
             title: title,
-            initialRoute: initialRoute,
-            routes: routes,
+            // initialRoute: initialRoute,
+            // routes: routes,
             theme: CupertinoThemeData(primaryColor: Colors.purple),
           )
         : MaterialApp(
+            home: HomePage(),
             title: title,
             theme: ThemeData(
               primarySwatch: Colors.purple,
             ),
-            initialRoute: initialRoute,
-            routes: routes,
+            // initialRoute: initialRoute,
+            // routes: routes,
           );
   }
 }

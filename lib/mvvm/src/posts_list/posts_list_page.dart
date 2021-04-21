@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:flutter_cubit/mvvm/mvvm.dart';
+import 'package:flutter_cubit/mvvm/src/posts_factory.dart';
 import 'package:flutter_cubit/utils/utils.dart';
 import 'package:flutter_cubit/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -15,35 +15,38 @@ class PostsListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).isTablet();
-    return ChangeNotifierProxyProvider<PostsRepository, PostsListVM>(
-      create: null,
-      update: (context, postsRepository, previous) => PostsListVM(postsRepository: postsRepository)..init(),
-      child: Row(
-        children: [
-          Flexible(
-            flex: 2,
-            child: _buildPostsList(),
-          ),
-          Visibility(
-              visible: isTablet,
-              child: Container(
-                width: 1,
-                color: Colors.black12,
-              )),
-          Visibility(
-            visible: isTablet,
-            child: Flexible(
-              child: Consumer<PostsListVM>(
-                builder: (context, postsListVM, child) => PostDetailsWidget(postId: postsListVM.selectedPostId),
-              ),
-              flex: 3,
+    return ColoredBox(
+      color: Colors.white,
+      child: ChangeNotifierProvider<PostsListVM>(
+        create: (context) =>
+            PostsListVM(postsRepository: Provider.of<PostsModuleFactory>(context, listen: false).getPostsRepository())
+              ..init(),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 2,
+              child: _buildPostsList(),
             ),
-          ),
-        ],
+            Visibility(
+                visible: isTablet,
+                child: Container(
+                  width: 1,
+                  color: Colors.black12,
+                )),
+            Visibility(
+              visible: isTablet,
+              child: Flexible(
+                child: Consumer<PostsListVM>(
+                  builder: (context, postsListVM, child) => PostDetailsWidget(postId: postsListVM.selectedPostId),
+                ),
+                flex: 3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-
 
   // REVIEW: Try to create heavy widget with list. Check if lagging during scroll
   Widget _buildPostsList() {

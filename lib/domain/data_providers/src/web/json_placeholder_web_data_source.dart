@@ -2,7 +2,7 @@ import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/models/src/user_model.dart';
 import 'dart:convert';
 import 'web_api.dart';
-import 'web_data_provider.dart';
+import 'web_data_source.dart';
 
 class JsonPlaceholderWebDataSource extends WebDataSource {
   final WebAPI webApi;

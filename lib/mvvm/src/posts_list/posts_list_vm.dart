@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 
+// REVIEW: Extract to module. Expose only starting widget. Finish sequence from e.g. post details, pass some argument back.
+//REVIEW: App bar on main page.
 class PostsListVM extends ChangeNotifier {
   static const _defaultSelectedPostId = -1;
 

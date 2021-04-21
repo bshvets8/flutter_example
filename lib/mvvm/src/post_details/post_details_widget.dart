@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:flutter_cubit/mvvm/mvvm.dart';
 import 'package:provider/provider.dart';
 
+import '../posts_factory.dart';
 import 'comments_list_widget.dart';
 import 'post_details_vm.dart';
 
@@ -14,14 +14,13 @@ class PostDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // REVIEW: Try to change to simple ChangeNotifierProvider
+    // Done: Try to change to simple ChangeNotifierProvider
     // REVIEW: Create instance in "create". Investigate if it helps
     // REVIEW: Check if VM is persisted between rebuilds
-    return ChangeNotifierProxyProvider<PostsRepository, PostDetailsVM>(
-      create: null,
-      update: (context, postsRepository, previous) {
-         return PostDetailsVM(postsRepository: postsRepository)..init(postId: postId);
-      },
+    return ChangeNotifierProvider<PostDetailsVM>(
+      create: (context) =>
+          PostDetailsVM(postsRepository: Provider.of<PostsModuleFactory>(context, listen: false).getPostsRepository())
+            ..init(postId: postId),
       child: Consumer<PostDetailsVM>(
         builder: (context, postDetailsVM, child) {
           if (postDetailsVM.isInitializing) {

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/data_providers/data_sources.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 

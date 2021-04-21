@@ -1,7 +1,7 @@
 import 'package:flutter_cubit/domain/models/models.dart';
 
 import 'comment_model_mapper.dart';
-import 'database_data_provider.dart';
+import 'database_data_source.dart';
 import 'post_model_mapper.dart';
 import 'posts_database.dart';
 

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/data_providers/data_sources.dart';
 import 'package:flutter_cubit/domain/data_providers/src/db/posts_database.dart';
 import 'package:flutter_cubit/domain/repositories/repositories.dart';
 import 'package:http/http.dart';
@@ -37,7 +37,7 @@ class _CubitHomePageState extends State<CubitHomePage> {
     final DatabaseDataSource databaseDataSource = DatabaseDataSourceImpl(PostsDatabase());
 
     _postsRepository = PostsRepositoryImpl(
-      webDataProvider: webDataProvider,
+      webDataSource: webDataProvider,
       databaseDataSource: databaseDataSource,
     );
 

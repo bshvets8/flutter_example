@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_cubit/domain/data_providers/data_providers.dart';
+import 'package:flutter_cubit/domain/data_providers/data_sources.dart';
 import 'package:flutter_cubit/domain/models/models.dart';
 
 import 'posts_repository.dart';
 
 class PostsRepositoryImpl extends PostsRepository {
-  final WebDataSource webDataProvider;
+  final WebDataSource webDataSource;
   final DatabaseDataSource databaseDataSource;
 
-  PostsRepositoryImpl({@required this.webDataProvider, this.databaseDataSource});
+  PostsRepositoryImpl({@required this.webDataSource, this.databaseDataSource});
 
   @override
   Stream<List<PostModel>> getPosts({bool forceFetch = false}) async* {
@@ -26,7 +26,7 @@ class PostsRepositoryImpl extends PostsRepository {
       getPosts().map((posts) => posts.firstWhere((element) => element.id == postId, orElse: () => null));
 
   Future<void> _loadPosts() async {
-    final posts = await webDataProvider.getPosts();
+    final posts = await webDataSource.getPosts();
     await databaseDataSource.deletePosts();
     await databaseDataSource.insertPosts(posts);
   }
