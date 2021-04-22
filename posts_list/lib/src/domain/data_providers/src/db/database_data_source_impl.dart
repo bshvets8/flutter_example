@@ -5,7 +5,6 @@ import 'database_data_source.dart';
 import 'post_model_mapper.dart';
 import 'posts_database.dart';
 
-// REVIEW: Rename to more specific. (e.g. Database). Hold separate db for every module
 class DatabaseDataSourceImpl extends DatabaseDataSource {
   final PostsDatabase database;
 

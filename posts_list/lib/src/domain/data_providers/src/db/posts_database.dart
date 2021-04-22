@@ -10,7 +10,7 @@ import 'tables/posts_table.dart';
 
 part 'posts_database.g.dart';
 
-// Review: Add migration: Add column Posts.id1. copy value from id. Use id1 instead of id
+// DONE: Add migration: Add column Posts.id1. copy value from id. Use id1 instead of id
 @UseMoor(tables: [Posts, Comments], include: {'migration.moor'})
 class PostsDatabase extends _$PostsDatabase {
   static const _databaseName = 'posts.db';
@@ -29,6 +29,7 @@ class PostsDatabase extends _$PostsDatabase {
   @override
   int get schemaVersion => _databaseVersion;
 
+  @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (migrator) => migrator.createAll(),
         onUpgrade: (migrator, from, to) async {

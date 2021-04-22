@@ -1,6 +1,6 @@
 import 'package:posts_list/src/domain/models/models.dart';
 
-// REVIEW: Rename to more specific. (e.g. Database). Hold separate db for every module
+// DONE: Rename to more specific. (e.g. Database). Hold separate db for every module
 abstract class DatabaseDataSource {
   Stream<List<PostModel>> getPosts();
 

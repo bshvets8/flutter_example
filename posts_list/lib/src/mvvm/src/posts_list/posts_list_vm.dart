@@ -6,6 +6,8 @@ import 'package:posts_list/src/domain/repositories/repositories.dart';
 
 // REVIEW: Extract to module. Expose only starting widget. Finish sequence from e.g. post details, pass some argument back.
 //REVIEW: App bar on main page.
+
+//REVIEW: Move module to 'modules' folder
 class PostsListVM extends ChangeNotifier {
   static const _defaultSelectedPostId = -1;
 

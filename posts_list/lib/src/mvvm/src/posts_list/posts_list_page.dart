@@ -72,7 +72,7 @@ class PostsListPage extends StatelessWidget {
                 postsListVM.selectPostId(postModel.id);
 
                 if (!MediaQuery.of(context).isTablet()) {
-                  Navigator.of(context).pushNamed(PostDetailsPage.routeName, arguments: postModel.id);
+                  NestedNavigator.of(context).pushNamed(PostDetailsPage.routeName, arguments: postModel.id);
                 }
               },
             );

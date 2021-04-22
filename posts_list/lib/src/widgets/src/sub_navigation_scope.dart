@@ -1,25 +1,56 @@
 import 'package:flutter/widgets.dart';
 
-class SubNavigationScope extends StatefulWidget {
-  final Widget child;
+//REVIEW: Rename to nested navigator.
+//REVIEW: Include willPopScope and Navigator inside
 
-  const SubNavigationScope({Key key, this.child}) : super(key: key);
+class NestedNavigator extends StatefulWidget {
+  final String initialRoute;
+
+  final RouteFactory onGenerateRoute;
+
+  final Scaffold scaffold;
+
+  const NestedNavigator({Key key, this.initialRoute, this.onGenerateRoute}) : super(key: key);
 
   @override
-  SubNavigationScopeState createState() => SubNavigationScopeState();
+  NestedNavigatorState createState() => NestedNavigatorState();
 
-  static SubNavigationScopeState of(BuildContext context) {
-    return context.findAncestorStateOfType<SubNavigationScopeState>();
+  static NestedNavigatorState of(BuildContext context) {
+    return context.findAncestorStateOfType<NestedNavigatorState>();
   }
 }
 
-class SubNavigationScopeState extends State<SubNavigationScope> {
+class NestedNavigatorState extends State<NestedNavigator> {
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return WillPopScope(
+      onWillPop: () async {
+        print('nested willpop called');
+        return !await navigatorKey.currentState.maybePop();
+      },
+      child: Navigator(
+        key: navigatorKey,
+        initialRoute: widget.initialRoute,
+        onGenerateRoute: widget.onGenerateRoute,
+      ),
+    );
   }
 
-  void finish<T extends Object>([T result]) {
-    Navigator.of(context).pop(result);
+  // REVIEW: Add all navigator methods
+  Future<T> pushNamed<T extends Object>(
+    String routeName, {
+    Object arguments,
+  }) {
+    navigatorKey.currentState.pushNamed(routeName, arguments: arguments);
+  }
+
+  void pop<T extends Object>({bool popNestedStack = false, T result = null}) {
+    if (popNestedStack) {
+      Navigator.of(context).pop(result);
+    } else {
+      navigatorKey.currentState.pop(result);
+    }
   }
 }

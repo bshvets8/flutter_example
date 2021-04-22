@@ -47,11 +47,11 @@ class PostDetailsWidget extends StatelessWidget {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () => SubNavigationScope.of(context).finish('YESS!!!'),
+                      onPressed: () => NestedNavigator.of(context).pop(result: 'YES(((', popNestedStack: false),
                       child: Text('Pop with YES'),
                     ),
                     ElevatedButton(
-                      onPressed: () => SubNavigationScope.of(context).finish('NO((('),
+                      onPressed: () => NestedNavigator.of(context).pop(result: 'NO(((', popNestedStack: true),
                       child: Text('Pop with NO'),
                     ),
                   ],
