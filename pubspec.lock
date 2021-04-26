@@ -207,10 +207,10 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  posts_list:
+  posts_list_module:
     dependency: "direct main"
     description:
-      path: posts_list
+      path: "modules/posts_list_module"
       relative: true
     source: path
     version: "0.0.1"
