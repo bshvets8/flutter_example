@@ -14,11 +14,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = Text('Flutter Architecture Example');
 
+    // isModal = backButton closes sequence
+    NestedAppBar(BackButton() or CloseButton(), title, isModal = false)
+
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
             middle: title,
           )
         : AppBar(
+      leading: BackButton(),
             title: title,
           );
 
