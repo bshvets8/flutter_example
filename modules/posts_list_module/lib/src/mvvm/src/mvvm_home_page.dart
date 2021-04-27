@@ -23,7 +23,6 @@ class MVVMHomePageState extends State<MVVMHomePage> {
   @override
   Widget build(BuildContext context) {
     final body = NestedNavigator(
-      tag: "mvvm",
       initialRoute: PostsListPage.routeName,
       onGenerateRoute: (settings) {
         WidgetBuilder pageBuilder;
@@ -46,39 +45,6 @@ class MVVMHomePageState extends State<MVVMHomePage> {
             : MaterialPageRoute(builder: pageBuilder, settings: settings);
       },
     );
-
-    // final bodtempy = SubNavigationScope(
-    //   child: WillPopScope(
-    //     onWillPop: () async {
-    //       print('nested willpop called');
-    //       return !await navigatorKey.currentState.maybePop();
-    //     },
-    //     child: Navigator(
-    //       key: navigatorKey,
-    //       initialRoute: PostsListPage.routeName,
-    //       onGenerateRoute: (settings) {
-    //         WidgetBuilder pageBuilder;
-    //
-    //         switch (settings.name) {
-    //           case PostDetailsPage.routeName:
-    //             pageBuilder = (_) => PostDetailsPage(postId: settings.arguments);
-    //             break;
-    //
-    //           case PostsListPage.routeName:
-    //             pageBuilder = (_) => PostsListPage();
-    //             break;
-    //
-    //           default:
-    //             return null;
-    //         }
-    //
-    //         return Platform.isIOS
-    //             ? CupertinoPageRoute(builder: pageBuilder, settings: settings)
-    //             : MaterialPageRoute(builder: pageBuilder, settings: settings);
-    //       },
-    //     ),
-    //   ),
-    // );
 
     return Provider<PostsModuleFactory>(
       create: (context) => PostsModuleFactoryImpl(),

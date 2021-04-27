@@ -1,35 +1,37 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-//REVIEW: Rename to nested navigator.
-//REVIEW: Include willPopScope and Navigator inside
+//DONE: Rename to nested navigator.
+//DONE: Include willPopScope and Navigator inside
 
 class NestedNavigator extends StatefulWidget {
   final String initialRoute;
 
   final RouteFactory onGenerateRoute;
 
-  final String tag;
-
-  const NestedNavigator({Key key, this.initialRoute, this.onGenerateRoute, this.tag}) : super(key: key);
+  NestedNavigator({Key key, this.initialRoute, this.onGenerateRoute}) : super(key: key);
 
   @override
-  NestedNavigatorState createState() => NestedNavigatorState();
+  _NestedNavigatorState createState() => _NestedNavigatorState();
 
-  static NestedNavigatorState of(BuildContext context) {
-    return context.findAncestorStateOfType<NestedNavigatorState>();
+  static _NestedNavigatorState of(BuildContext context) {
+    return context.findAncestorStateOfType<_NestedNavigatorState>();
   }
 }
 
-class NestedNavigatorState extends State<NestedNavigator> {
+class _NestedNavigatorState extends State<NestedNavigator> {
   final navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        print('nested willpop called, tag = ${widget.tag} canPop = ${canPop()}');
-        return !await navigatorKey.currentState.maybePop();
+        final result = !await navigatorKey.currentState.maybePop();
+        NestedScaffold._updateScaffold(context);
+        return result;
       },
       child: Navigator(
         key: navigatorKey,
@@ -39,27 +41,14 @@ class NestedNavigatorState extends State<NestedNavigator> {
     );
   }
 
-  // REVIEW: Add all navigator methods
   Future<T> pushNamed<T extends Object>(
     String routeName, {
     Object arguments,
   }) {
     final result = navigatorKey.currentState.pushNamed(routeName, arguments: arguments);
-    print("tag = ${widget.tag}");
-    context.findAncestorStateOfType<NestedNavigationParentState>().setState(() {
-
-    });
+    NestedScaffold._updateScaffold(context);
 
     return result;
-  }
-
-  @optionalTypeArgs
-  String restorablePushNamed<T extends Object>(
-    BuildContext context,
-    String routeName, {
-    Object arguments,
-  }) {
-    return navigatorKey.currentState.restorablePushNamed<T>(routeName, arguments: arguments);
   }
 
   Future<T> pushReplacementNamed<T extends Object, TO extends Object>(
@@ -76,48 +65,22 @@ class NestedNavigatorState extends State<NestedNavigator> {
     } else {
       navigatorKey.currentState.pop(result);
     }
+
+    NestedScaffold._updateScaffold(context);
   }
+
+  // REVIEW: Add popUntil
 
   bool canPop() {
     return navigatorKey.currentState.canPop();
   }
 }
 
-class NestedNavigationScaffold extends Scaffold {
-  final NestedNavigator nestedNavigator;
+class _CanPopInterceptorPageRoute extends MaterialPageRoute {
+  final GlobalKey<_NestedNavigatorState> nestedNavigatorKey;
 
-  NestedNavigationScaffold(this.nestedNavigator);
-
-  @override
-  Widget get body => nestedNavigator;
-
-  @override
-  NestedNavigationScaffoldState createState() {
-    return NestedNavigationScaffoldState();
-  }
-}
-
-class NestedNavigationScaffoldState extends ScaffoldState {
-  @override
-  Widget build(BuildContext context) {
-    final parentScaffold = super.build(context);
-
-    // (widget as NestedNavigationScaffold).superBody;
-
-    // return Navigator(
-    //   initialRoute: '_',
-    //   onGenerateRoute: (settings) =>
-    //       m(
-    //         navigatorKey: navigator, builder: (context) => parentScaffold,),
-    // );
-  }
-}
-
-class CustomRoute extends MaterialPageRoute {
-  final GlobalKey<NestedNavigatorState> navigatorKey;
-
-  CustomRoute({
-    this.navigatorKey,
+  _CanPopInterceptorPageRoute({
+    this.nestedNavigatorKey,
     WidgetBuilder builder,
     RouteSettings settings,
     bool maintainState = true,
@@ -126,52 +89,50 @@ class CustomRoute extends MaterialPageRoute {
 
   @override
   bool get canPop {
-    print("Route canPop used, nav tag = ${navigatorKey.currentState?.widget?.tag ?? 'null'} canPop = ${navigatorKey.currentState?.canPop() ?? false}");
-    return navigatorKey.currentState?.canPop() ?? false;
-  }
-
-  @override
-  void changedExternalState() {
-    super.changedExternalState();
-    print('changedExternalState');
+    return nestedNavigatorKey.currentState?.canPop() ?? false;
   }
 }
 
-///////////////////////////////////////////////
+class NestedScaffold extends StatefulWidget {
+  final PreferredSizeWidget appBar;
 
-typedef NestedNavigationRootBuilder = Widget Function(BuildContext context, Widget body);
+  final NestedNavigator nestedNavigator;
 
-class NestedNavigationParent extends StatefulWidget {
-  final NestedNavigationRootBuilder builder;
+  const NestedScaffold({Key key, this.appBar, this.nestedNavigator}) : super(key: key);
 
-  final String initialRoute;
-
-  final RouteFactory onGenerateRoute;
-
-  const NestedNavigationParent({Key key, this.builder, this.initialRoute, this.onGenerateRoute}) : super(key: key);
+  static void _updateScaffold(context) {
+    context.findAncestorStateOfType<_NestedScaffoldState>().setState(() {});
+  }
 
   @override
-  NestedNavigationParentState createState() => NestedNavigationParentState();
+  _NestedScaffoldState createState() => _NestedScaffoldState();
 }
 
-class NestedNavigationParentState extends State<NestedNavigationParent> {
-  final nestedNavigatorKey = GlobalKey<NestedNavigatorState>();
+class _NestedScaffoldState extends State<NestedScaffold> {
+  final bodyNestedNavigatorKey = GlobalKey<_NestedNavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    final nestedNavigator = NestedNavigator(
-      tag: "body",
-      key: nestedNavigatorKey,
-      initialRoute: widget.initialRoute,
-      onGenerateRoute: widget.onGenerateRoute,
+    final bodyNestedNavigator = NestedNavigator(
+      key: bodyNestedNavigatorKey,
+      initialRoute: widget.nestedNavigator.initialRoute,
+      onGenerateRoute: widget.nestedNavigator.onGenerateRoute,
     );
 
     return NestedNavigator(
-      tag: "root",
-      initialRoute: '_',
-      onGenerateRoute: (settings) => CustomRoute(
-        navigatorKey: nestedNavigatorKey,
-        builder: (context) => widget.builder(context, nestedNavigator),
+      onGenerateRoute: (settings) => _CanPopInterceptorPageRoute(
+        nestedNavigatorKey: bodyNestedNavigatorKey,
+        builder: (context) {
+          return Platform.isIOS
+              ? CupertinoPageScaffold(
+                  navigationBar: widget.appBar,
+                  child: bodyNestedNavigator,
+                )
+              : Scaffold(
+                  appBar: widget.appBar,
+                  body: bodyNestedNavigator,
+                );
+        },
       ),
     );
   }

@@ -13,49 +13,43 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = Text('Flutter Architecture Example');
 
-    return NestedNavigationParent(
-      builder: (context, body) {
-        if (Platform.isIOS)
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-            ),
-            child: body,
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: title,
+          )
+        : AppBar(
+            title: title,
           );
-        else {
-          return Scaffold(
-            appBar: AppBar(
-              title: title,
-            ),
-            body: body,
-          );
-        }
-      },
-      initialRoute: HomeWidget.routeName,
-      onGenerateRoute: (settings) {
-        WidgetBuilder pageBuilder;
 
-        switch (settings.name) {
-          case HomeWidget.routeName:
-            pageBuilder = (_) => HomeWidget();
-            break;
+    return NestedScaffold(
+      appBar: appBar,
+      nestedNavigator: NestedNavigator(
+        initialRoute: HomeWidget.routeName,
+        onGenerateRoute: (settings) {
+          WidgetBuilder pageBuilder;
 
-          case MVVMHomePage.routeName:
-            pageBuilder = (_) => MVVMHomePage();
-            break;
+          switch (settings.name) {
+            case HomeWidget.routeName:
+              pageBuilder = (_) => HomeWidget();
+              break;
 
-          case CubitHomePage.routeName:
-            pageBuilder = (_) => CubitHomePage();
-            break;
+            case MVVMHomePage.routeName:
+              pageBuilder = (_) => MVVMHomePage();
+              break;
 
-          default:
-            return null;
-        }
+            case CubitHomePage.routeName:
+              pageBuilder = (_) => CubitHomePage();
+              break;
 
-        return Platform.isIOS
-            ? CupertinoPageRoute(builder: pageBuilder, settings: settings)
-            : MaterialPageRoute(builder: pageBuilder, settings: settings);
-      },
+            default:
+              return null;
+          }
+
+          return Platform.isIOS
+              ? CupertinoPageRoute(builder: pageBuilder, settings: settings)
+              : MaterialPageRoute(builder: pageBuilder, settings: settings);
+        },
+      ),
     );
   }
 }
@@ -85,9 +79,7 @@ class HomeWidget extends StatelessWidget {
             onPressed: () => NestedNavigator.of(context)
                 .pushNamed(MVVMHomePage.routeName)
                 .then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value))))
-                // .onError((error, stackTrace) =>
-                //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString()))))
-                ,
+                .onError((error, stackTrace) {}),
             child: Text(
               "MVVM",
               style: TextStyle(color: Colors.white),
