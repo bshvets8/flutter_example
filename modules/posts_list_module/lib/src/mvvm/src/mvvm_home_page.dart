@@ -22,6 +22,8 @@ class MVVMHomePageState extends State<MVVMHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final title = Text("MVVM Page");
+
     final body = NestedNavigator(
       initialRoute: PostsListPage.routeName,
       onGenerateRoute: (settings) {
@@ -46,10 +48,24 @@ class MVVMHomePageState extends State<MVVMHomePage> {
       },
     );
 
+    final scaffold = Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: body,
+            navigationBar: CupertinoNavigationBar(
+              middle: title,
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: title,
+            ),
+            body: body,
+          );
+
     return Provider<PostsModuleFactory>(
       create: (context) => PostsModuleFactoryImpl(),
       dispose: (context, factory) => factory.dispose(),
-      child: body,
+      child: scaffold,
     );
   }
 }

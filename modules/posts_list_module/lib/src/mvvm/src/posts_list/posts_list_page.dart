@@ -4,7 +4,6 @@ import 'package:posts_list_module/src/mvvm/src/posts_factory.dart';
 import 'package:posts_list_module/src/utils/utils.dart';
 import 'package:posts_list_module/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:nested_navigation_module/nested_navigation_module.dart';
 
 import '../post_details/post_details_page.dart';
 import '../post_details/post_details_widget.dart';
@@ -75,7 +74,7 @@ class PostsListPage extends StatelessWidget {
                 postsListVM.selectPostId(postModel.id);
 
                 if (!MediaQuery.of(context).isTablet()) {
-                  NestedNavigator.of(context).pushNamed(PostDetailsPage.routeName, arguments: postModel.id);
+                  Navigator.of(context).pushNamed(PostDetailsPage.routeName, arguments: postModel.id);
                 }
               },
             );
