@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:posts_list_module/src/mvvm/src/posts_factory.dart';
 import 'package:posts_list_module/src/mvvm/src/posts_factory_impl.dart';
-import 'package:posts_list_module/src/widgets/src/nested_navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:nested_navigation_module/nested_navigation_module.dart';
 
 import 'post_details/post_details_page.dart';
 import 'posts_list/posts_list_page.dart';

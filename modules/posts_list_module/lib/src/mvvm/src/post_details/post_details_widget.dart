@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:posts_list_module/src/widgets/src/nested_navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:nested_navigation_module/nested_navigation_module.dart';
 
 import '../posts_factory.dart';
 import 'comments_list_widget.dart';

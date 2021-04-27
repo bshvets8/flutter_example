@@ -4,9 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-//DONE: Rename to nested navigator.
-//DONE: Include willPopScope and Navigator inside
-
 class NestedNavigator extends StatefulWidget {
   final String initialRoute;
 

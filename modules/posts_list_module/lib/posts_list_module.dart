@@ -4,4 +4,3 @@ library posts_list_module;
 // DONE: Rename to posts_list_module
 export 'src/mvvm/src/mvvm_home_page.dart';
 export 'src/cubit/src/cubit_home_page.dart';
-export 'src/widgets/src/nested_navigator.dart';

@@ -1,7 +1,8 @@
-name: posts_list_module
+name: nested_navigation_module
 description: A new Flutter package.
 version: 0.0.1
 author:
+homepage:
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,25 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc:
-  flutter_bloc:
-  provider:
-  moor:
-  sqlite3_flutter_libs:
-  path_provider:
-  path:
-
-  http:
-  rxdart: # REVIEW: Remove. Implement myself. As training
-
-  nested_navigation_module:
-    path: ../nested_navigation_module
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  moor_generator:
-  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

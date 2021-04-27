@@ -4,6 +4,7 @@ import 'package:posts_list_module/src/mvvm/src/posts_factory.dart';
 import 'package:posts_list_module/src/utils/utils.dart';
 import 'package:posts_list_module/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:nested_navigation_module/nested_navigation_module.dart';
 
 import '../post_details/post_details_page.dart';
 import '../post_details/post_details_widget.dart';
